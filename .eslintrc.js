@@ -27,6 +27,8 @@ module.exports = {
         project: './tsconfig.json',
     },
     rules: {
+        'react/jsx-uses-react': 'off',
+        'react/react-in-jsx-scope': 'off',
         '@typescript-eslint/naming-convention': [
             'warn',
             {
@@ -40,7 +42,6 @@ module.exports = {
         'import/no-extraneous-dependencies': 'off',
         'import/prefer-default-export': 'off',
         'react/prop-types': 'off',
-        'react/react-in-jsx-scope': 'off',
         'linebreak-style': 'off',
         'no-useless-escape': 'warn',
         'prettier/prettier': [
