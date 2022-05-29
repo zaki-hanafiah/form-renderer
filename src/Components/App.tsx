@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getFormDefinitions } from 'Services'
 import { TField } from 'Definitions'
-import { FORM_DEFINITIONS } from 'Constant/form_definitions'
+import { FORM_DEFINITIONS } from 'Constants/form_definitions'
 import FormBody from 'Components/Form/FormBody'
 import MainLayout from './Layout/main'
 import 'Styles/App.css'
