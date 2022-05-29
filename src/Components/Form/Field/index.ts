@@ -1,1 +1,3 @@
-export { default as Field } from './field'
+import Field from './field'
+
+export default Field

@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { getFormDefinitions } from 'Services'
+import { TField } from 'Definitions'
+import { FORM_DEFINITIONS } from 'Constant/form_definitions'
+import FormBody from 'Components/Form/FormBody'
 import MainLayout from './Layout/main'
 import 'Styles/App.css'
-import { FORM_DEFINITIONS } from '../Constant/form_definitions'
 
 function App() {
     const hasFetchedAPI = useRef(false)
 
-    const [is_loading, setIsLoading] = useState(true)
-    const [form_definitions, setFormDefinitions] = useState({})
+    const [is_loading, setIsLoading] = useState<boolean>(true)
+    const [field_definitions, setFieldDefinitions] = useState<TField[]>([])
     useEffect(() => {
         if (hasFetchedAPI.current) {
             return
@@ -16,28 +18,34 @@ function App() {
         getFormDefinitions()
             .then((response) => {
                 if (!response.error) {
-                    setFormDefinitions(response)
+                    setFieldDefinitions(response)
                 }
                 setIsLoading(false)
             })
             .catch((error) => {
                 console.log(error)
                 // TEMP: use static form definitions to render form initially
-                setFormDefinitions(FORM_DEFINITIONS)
+                setFieldDefinitions(FORM_DEFINITIONS)
                 setIsLoading(false)
             })
         hasFetchedAPI.current = true
     }, [])
 
     useEffect(() => {
-        if (form_definitions) {
-            console.log(form_definitions)
+        if (field_definitions) {
+            console.log(field_definitions)
         }
-    }, [form_definitions])
+    }, [field_definitions])
 
     return (
         <MainLayout>
-            {is_loading ? <div>is loading</div> : <div>has loaded</div>}
+            {is_loading ? (
+                <div>is loading</div>
+            ) : (
+                <div>
+                    <FormBody field_definitions={field_definitions} />
+                </div>
+            )}
         </MainLayout>
     )
 }

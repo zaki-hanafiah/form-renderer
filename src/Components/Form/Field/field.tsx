@@ -1,7 +1,7 @@
 import { Select, Form, Input, Radio } from 'antd'
 import { TField } from 'Definitions'
 
-const FormField = ({ field_data, name }: TFormField) => {
+const Field = ({ field_data, name }: TFieldProps) => {
     const {
         isHidden,
         isOptional,
@@ -30,14 +30,16 @@ const FormField = ({ field_data, name }: TFormField) => {
             </Form.Item>
         )
     }
-    if (type === 'radio') {
+    if (type === 'radio' && Array.isArray(value)) {
         return (
-            <Form.Item
-                name={name}
-                valuePropName="checked"
-                required={!isOptional}
-            >
-                <Radio>{label}</Radio>
+            <Form.Item name={name} label={label} required={!isOptional}>
+                <Radio.Group>
+                    {value.map((option: string, idx) => (
+                        <Radio key={idx} value={idx}>
+                            {option}
+                        </Radio>
+                    ))}
+                </Radio.Group>
             </Form.Item>
         )
     }
@@ -63,9 +65,9 @@ const FormField = ({ field_data, name }: TFormField) => {
     )
 }
 
-type TFormField = {
+type TFieldProps = {
     name: string
     field_data: TField
 }
 
-export default FormField
+export default Field
