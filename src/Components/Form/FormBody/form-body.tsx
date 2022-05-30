@@ -1,7 +1,12 @@
 import { Button, Form, Row } from 'antd'
 import Field from 'Components/Form/Field'
 import { TField } from 'Definitions'
-import { convertToSnakeCase, mapInitialValues, mapIsValidFields } from 'Utils'
+import {
+    convertBackToLabel,
+    convertToSnakeCase,
+    mapInitialValues,
+    mapIsValidFields,
+} from 'Utils'
 
 const FormBody = ({ field_definitions }: TFormBodyProps) => {
     const [generatedForm] = Form.useForm()
@@ -18,7 +23,7 @@ const FormBody = ({ field_definitions }: TFormBodyProps) => {
         Object.keys(mapped_validation).forEach((name: string) => {
             Object.assign(printed_output, {
                 [name]: {
-                    label: name,
+                    label: convertBackToLabel(name),
                     value: form_values[name as keyof typeof form_values],
                     isValid:
                         mapped_validation[
@@ -28,7 +33,7 @@ const FormBody = ({ field_definitions }: TFormBodyProps) => {
             })
         })
         // paste output on screen here
-        console.log(printed_output)
+        console.log(JSON.stringify(printed_output))
     }
     return (
         <Form
