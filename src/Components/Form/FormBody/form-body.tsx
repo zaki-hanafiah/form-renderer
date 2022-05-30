@@ -1,16 +1,22 @@
-import { Button, Form, Row } from 'antd'
+import { Button, Col, Divider, Form, Row } from 'antd'
+import JSONPretty from 'react-json-pretty'
+import 'react-json-pretty/themes/monikai.css'
 import Field from 'Components/Form/Field'
-import { TField } from 'Definitions'
+import { ObjectWithAnyKey, TField } from 'Definitions'
 import {
     convertBackToLabel,
     convertToSnakeCase,
     mapInitialValues,
     mapIsValidFields,
 } from 'Utils'
+import { Fragment, useState } from 'react'
 
 const FormBody = ({ field_definitions }: TFormBodyProps) => {
     const [generatedForm] = Form.useForm()
     const mapped_initial_values = mapInitialValues(field_definitions)
+    const [json_output, setJSONOutput] = useState<ObjectWithAnyKey | undefined>(
+        undefined
+    )
 
     const onSubmit = () => {
         const form_values = generatedForm.getFieldsValue(true)
@@ -33,41 +39,59 @@ const FormBody = ({ field_definitions }: TFormBodyProps) => {
             })
         })
         // paste output on screen here
+        setJSONOutput(printed_output)
         console.log(JSON.stringify(printed_output))
     }
     return (
-        <Form
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 8 }}
-            form={generatedForm}
-            name="generatedForm"
-            id="generatedForm"
-            initialValues={mapped_initial_values}
-            onFinish={onSubmit}
-        >
-            {field_definitions.map((field, idx: number) => {
-                return (
-                    <Field
-                        name={
-                            field.label
-                                ? convertToSnakeCase(field.label)
-                                : `field_${idx}`
-                        }
-                        key={`field_${idx}`}
-                        field_data={field}
-                    />
-                )
-            })}
-            <Row>
-                <Button
-                    type="primary"
-                    onClick={onSubmit}
-                    style={{ margin: '0 auto' }}
-                >
-                    Submit Form
-                </Button>
-            </Row>
-        </Form>
+        <Fragment>
+            <Form
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 8 }}
+                form={generatedForm}
+                name="generatedForm"
+                id="generatedForm"
+                initialValues={mapped_initial_values}
+                onFinish={onSubmit}
+            >
+                {field_definitions.map((field, idx: number) => {
+                    return (
+                        <Field
+                            name={
+                                field.label
+                                    ? convertToSnakeCase(field.label)
+                                    : `field_${idx}`
+                            }
+                            key={`field_${idx}`}
+                            field_data={field}
+                        />
+                    )
+                })}
+                <Row>
+                    <Button
+                        type="primary"
+                        onClick={onSubmit}
+                        style={{ margin: '0 auto' }}
+                    >
+                        Submit Form
+                    </Button>
+                </Row>
+            </Form>
+            {json_output && (
+                <Fragment>
+                    <Divider>
+                        <strong>JSON Output</strong>
+                    </Divider>
+                    <Row>
+                        <Col span={18} offset={3}>
+                            <JSONPretty
+                                id="json-pretty"
+                                data={json_output}
+                            ></JSONPretty>
+                        </Col>
+                    </Row>
+                </Fragment>
+            )}
+        </Fragment>
     )
 }
 type TFormBodyProps = {
