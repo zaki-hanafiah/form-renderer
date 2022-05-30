@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Button, Result, Spin } from 'antd'
 import { getFormDefinitions } from 'Services'
 import { TField } from 'Definitions'
@@ -14,6 +14,11 @@ function App() {
     const [is_loading, setIsLoading] = useState<boolean>(true)
     const [field_definitions, setFieldDefinitions] = useState<TField[]>([])
     const [has_api_error, setHasAPIError] = useState<boolean>(false)
+
+    const fetchMockData = () => {
+        setHasAPIError(false)
+        setFieldDefinitions(FORM_DEFINITIONS)
+    }
 
     const fetchAPI = () => {
         setIsLoading(true)
@@ -59,9 +64,14 @@ function App() {
                     status="error"
                     title="There was an issue fetching the API, please try again."
                     extra={
-                        <Button type="primary" onClick={fetchAPI}>
-                            Try again
-                        </Button>
+                        <Fragment>
+                            <Button type="primary" onClick={fetchAPI}>
+                                Try again
+                            </Button>
+                            <Button type="primary" onClick={fetchMockData}>
+                                Use mock data
+                            </Button>
+                        </Fragment>
                     }
                 />
             ) : (
