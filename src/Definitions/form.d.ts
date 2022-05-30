@@ -6,3 +6,7 @@ export type TField = {
     default?: string | number
     value?: string | number | string[]
 }
+
+export type TFormValue = {
+    [string]: string
+}

@@ -1,17 +1,34 @@
 import { Button, Form, Row } from 'antd'
 import Field from 'Components/Form/Field'
 import { TField } from 'Definitions'
-import { convertToSnakeCase, mapInitialValues } from 'Utils'
+import { convertToSnakeCase, mapInitialValues, mapIsValidFields } from 'Utils'
 
 const FormBody = ({ field_definitions }: TFormBodyProps) => {
     const [generatedForm] = Form.useForm()
     const mapped_initial_values = mapInitialValues(field_definitions)
-    console.log(mapped_initial_values)
 
-    const onFinish = () => {
+    const onSubmit = () => {
         const form_values = generatedForm.getFieldsValue(true)
-        console.log(form_values)
+        const mapped_validation = mapIsValidFields(
+            form_values,
+            field_definitions
+        )
+
+        const printed_output = {}
+        Object.keys(mapped_validation).forEach((name: string) => {
+            Object.assign(printed_output, {
+                [name]: {
+                    label: name,
+                    value: form_values[name as keyof typeof form_values],
+                    isValid:
+                        mapped_validation[
+                            name as keyof typeof mapped_validation
+                        ],
+                },
+            })
+        })
         // paste output on screen here
+        console.log(printed_output)
     }
     return (
         <Form
@@ -21,7 +38,7 @@ const FormBody = ({ field_definitions }: TFormBodyProps) => {
             name="generatedForm"
             id="generatedForm"
             initialValues={mapped_initial_values}
-            onFinish={onFinish}
+            onFinish={onSubmit}
         >
             {field_definitions.map((field, idx: number) => {
                 return (
@@ -39,9 +56,8 @@ const FormBody = ({ field_definitions }: TFormBodyProps) => {
             <Row>
                 <Button
                     type="primary"
-                    onClick={onFinish}
+                    onClick={onSubmit}
                     style={{ margin: '0 auto' }}
-                    // loading={is_loading}
                 >
                     Submit Form
                 </Button>
