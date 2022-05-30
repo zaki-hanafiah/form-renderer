@@ -4,7 +4,7 @@ export const getFormDefinitions = async () => {
         return { error: 'Endpoint is undefined' }
     }
     const form_definitions = await fetch(`${API_URI}/form`, {
-        headers: { 'Content-Type': 'application/json', mode: 'cors' },
+        headers: { 'Content-Type': 'application/json' },
     })
     const { ok }: Response = form_definitions
     return ok
