@@ -65,9 +65,9 @@ export const mapIsValidFields = (
 
     const mapped_is_valid_fields = {}
     Object.keys(form_values).forEach((name: string) => {
-        const value: string = form_values[name as keyof typeof form_values]
-        const rules: string[] = field_config[name as keyof typeof field_config]
-        if (rules) {
+        const value = (form_values as Record<string, string>)[name]
+        const rules = (field_config as Record<string, string[]>)[name]
+        if (rules && typeof value === 'string') {
             Object.assign(mapped_is_valid_fields, {
                 [name]: validateField(value, rules),
             })
