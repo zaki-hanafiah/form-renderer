@@ -40,7 +40,6 @@ const FormBody = ({ field_definitions }: TFormBodyProps) => {
         })
         // paste output on screen here
         setJSONOutput(printed_output)
-        console.log(JSON.stringify(printed_output))
     }
     return (
         <Fragment>
